@@ -1,11 +1,14 @@
-import type { NextPage } from 'next';
+import { Layout } from '../components/Layout';
 
-const Home: NextPage = () => {
+const IndexPage = () => {
   return (
-    <div>
-      <p>Home</p>
-    </div>
-  )
+    <Layout title="Home | Next.js + TypeScript Example">
+      <h1 className="mt-5">Hello Next.js + Keycloak 👋</h1>
+      <div className="mb-5 lead text-muted">
+        This is an example of a Next.js site using Keycloak.
+      </div>
+    </Layout>
+  );
 }
 
-export default Home;
+export default IndexPage;
