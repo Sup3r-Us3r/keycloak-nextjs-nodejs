@@ -175,3 +175,39 @@ Execute the CURL from Terminal or use Insomnia/Postman. The response would look 
 ![generate-token-with-keycloak-api](.github/generate-token-with-keycloak-api.png)
 
 </details>
+
+<details>
+<summary>
+Node.js app
+</summary>
+
+This application is very simple, it has some endpoints that are protected with Keycloak, that is, the user to be able to consume that endpoint needs to be authenticated and have all the roles that the endpoint needs to access it.
+
+### Endpoints
+
+| METHOD | URL          | ROLE             | DESCRIPTION                                                                            |
+| ------ | ------------ | ---------------- | -------------------------------------------------------------------------------------- |
+| `GET`  | `/anonymous` | -                | Public endpoint without Keycloak protection                                            |
+| `GET`  | `/user`      | `user`           | Secure endpoint with Keycloak and **user** role required to grant access               |
+| `GET`  | `/admin`     | `admin`          | Secure endpoint with Keycloak and **admin** role required to grant access              |
+| `GET`  | `/all-user`  | `user` + `admin` | Secure endpoint with Keycloak and **user** and **admin** role required to grant access |
+
+### Run Node.js API
+
+First install all dependencies
+
+```bash
+$ cd keycloak-nextjs-nodejs
+$ npm install
+```
+
+Now execute API
+
+```bash
+$ cd keycloak-nextjs-nodejs
+$ npm run dev
+```
+
+The API after running will be available on port 3333.
+
+</details>
