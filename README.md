@@ -27,7 +27,7 @@ Now go to http://localhost:8080 and see if Keycloak opens in your browser.
 
 <details>
 <summary>
-Keycloak settings
+Keycloak Settings
 </summary>
 
 ### Create Realm
@@ -173,6 +173,19 @@ curl -X POST '<KEYCLOAK_SERVER_URL>/auth/realms/<REALM_NAME>/protocol/openid-con
 Execute the CURL from Terminal or use Insomnia/Postman. The response would look like below.
 
 ![generate-token-with-keycloak-api](.github/generate-token-with-keycloak-api.png)
+
+### Configure Token Expiration Time
+
+To access this setting you need to go to: `Realm settings` and then `Tokens`.
+
+You can change the expiration time of the tokens, by default the `access_token` has an expiration of `5min` and the `refresh_token` has an expiration of `30min`, you can increase this time if you want.
+
+![realm-tokens-settings](.github/realm-tokens-settings.jpg)
+
+In this case, I have the following configuration:
+
+- **access_token**: 30min
+- **refresh_token**: 1day
 
 </details>
 
