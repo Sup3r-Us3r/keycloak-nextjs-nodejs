@@ -178,7 +178,7 @@ Execute the CURL from Terminal or use Insomnia/Postman. The response would look 
 
 <details>
 <summary>
-Node.js app
+Node.js API
 </summary>
 
 This application is very simple, it has some endpoints that are protected with Keycloak, that is, the user to be able to consume that endpoint needs to be authenticated and have all the roles that the endpoint needs to access it.
@@ -197,17 +197,75 @@ This application is very simple, it has some endpoints that are protected with K
 First install all dependencies
 
 ```bash
-$ cd keycloak-nextjs-nodejs
+$ cd keycloak-nextjs-nodejs/nodejs
 $ npm install
 ```
 
 Now execute API
 
 ```bash
-$ cd keycloak-nextjs-nodejs
+$ cd keycloak-nextjs-nodejs/nodejs
 $ npm run dev
 ```
 
 The API after running will be available on port 3333.
+
+</details>
+
+<details>
+<summary>
+Next.js App
+</summary>
+
+### Run Next.js App
+
+First access the nextjs app folder
+
+```bash
+$ cd keycloak-nextjs-nodejs/nextjs
+```
+
+Install all dependencies
+
+```bash
+$ npm install
+```
+
+Configure environment variables, some variables where inserted, add a value to variable `KEYCLOAK_CLIENT_SECRET` from your **client** in Keycloak
+
+```bash
+$ cp .env.local.example .env.local
+```
+
+Now execute app
+
+```bash
+$ cd keycloak-nextjs-nodejs/nextjs
+$ npm run dev
+```
+
+The app after running will be available on port 3000.
+
+### Sign in page
+
+![keycloak-login-page](.github/keycloak-login-page.png)
+
+### Home page
+
+![nextjs-app-home](.github/nextjs-app-home.png)
+
+### Profile
+
+Logged
+
+![nextjs-app-profile](.github/nextjs-app-profile.png)
+
+Logged out
+
+![nextjs-app-profile-without-data](.github/nextjs-app-profile-without-data.png)
+
+This application, when making a request to the API endpoints in Node.js, if the access token expires, an Axios interceptor was created to monitor and perform the auto refresh token and with that the call that failed due to the token being invalid will work.
+
+![api-refresh-token-with-interceptors](.github/api-refresh-token-with-interceptors.jpg)
 
 </details>
