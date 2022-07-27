@@ -140,4 +140,38 @@ After role assignment, assigned roles will be available under `Assigned Roles` l
 
 Yes, it was a bit of a hassle to go through all the configurations. But when you keep using Keycloak, these configurations will become a piece of cake. For new application getting added, you don’t need to do all of the above. You just need to add a new client with client roles and assign the client roles to corresponding realm roles.
 
+### Generate Tokens
+
+Let’s quickly test the authentication of some user created above and see if the tokens are being generated correctly.
+
+1. Go to `Realm Settings` of the `apps` from the left menu and click on `OpenID Endpoint Configuration` to view OpenID Endpoint details.
+
+![realm-settings](.github/realm-settings.png)
+![keycloak-all-endpoints](.github/keycloak-all-endpoints.png)
+
+Keycloak Realm OpenID Endpoint Configuration
+
+2. Copy `token_endpoint` from the `OpenID Endpoint Configuration`. URL would look like:
+
+```
+<KEYCLOAK_SERVER_URL>/auth/realms/<REALM_NAME>/protocol/openid-connect/token
+
+Ex: http://localhost:8080/auth/realms/apps/protocol/openid-connect/token
+```
+
+3. Use the following CURL command to generate user credentials. Replace `KEYCLOAK_SERVER_URL`, `REALM_NAME`, `CLIENT_ID`, `USERNAME`, `PASSWORD` with correct values.
+
+```
+curl -X POST '<KEYCLOAK_SERVER_URL>/auth/realms/<REALM_NAME>/protocol/openid-connect/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=password' \
+  --data-urlencode 'client_id=<CLIENT_ID>' \
+  --data-urlencode 'username=<USERNAME>' \
+  --data-urlencode 'password=<PASSWORD>'
+```
+
+Execute the CURL from Terminal or use Insomnia/Postman. The response would look like below.
+
+![generate-token-with-keycloak-api](.github/generate-token-with-keycloak-api.png)
+
 </details>
