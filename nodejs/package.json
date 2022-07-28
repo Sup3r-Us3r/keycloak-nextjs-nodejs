@@ -16,9 +16,10 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@keycloak/keycloak-admin-client": "^19.0.0",
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
-    "keycloak-connect": "^18.0.2"
+    "keycloak-connect": "^19.0.0"
   }
 }
