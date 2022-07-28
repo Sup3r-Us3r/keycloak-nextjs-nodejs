@@ -10,6 +10,8 @@ type FailedRequestsQueue = {
 
 let isRefreshingToken: boolean = false;
 let failedRequestsQueue: FailedRequestsQueue[] = [];
+let requestsAttempts = 0;
+const maximumRequestsAttempts = 3;
 
 function setupAPIClient(keycloakSession: KeycloakSession['data']): AxiosInstance {
   const api = axios.create({
@@ -22,7 +24,7 @@ function setupAPIClient(keycloakSession: KeycloakSession['data']): AxiosInstance
   api.interceptors.response.use(response => {
     return response;
   }, (error: AxiosError) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && (requestsAttempts < maximumRequestsAttempts)) {
       if ((error.response?.data as { errorCode: string })?.errorCode === 'token.invalid') {
         const axiosOriginalErrorConfig = error.config;
 
@@ -47,7 +49,10 @@ function setupAPIClient(keycloakSession: KeycloakSession['data']): AxiosInstance
               failedRequestsQueue.forEach(request => request.onFailure(error));
               failedRequestsQueue = [];
             })
-            .finally(() => isRefreshingToken = false);
+            .finally(() => {
+              isRefreshingToken = false;
+              requestsAttempts++;
+            });
         }
 
         return new Promise((resolve, reject) => {
@@ -65,6 +70,10 @@ function setupAPIClient(keycloakSession: KeycloakSession['data']): AxiosInstance
       } else {
         return Promise.reject(error);
       }
+    }
+
+    if (requestsAttempts >= maximumRequestsAttempts) {
+      requestsAttempts = 0;
     }
 
     return Promise.reject(error);
