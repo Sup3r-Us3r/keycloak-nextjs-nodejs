@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import session from 'express-session';
 import Keycloak, { Keycloak as KeycloakType, KeycloakConfig } from 'keycloak-connect';
+
 import { AppError } from '../errors/AppError';
 
 let _keycloak: KeycloakType;
@@ -15,7 +16,7 @@ const keycloakConfig: KeycloakConfig = {
   'ssl-required': 'external'
 };
 
-Keycloak.prototype.accessDenied = (request: Request, response: Response) => {
+Keycloak.prototype.accessDenied = async (request: Request, response: Response) => {
   if (!request.headers.authorization) {
     return response.status(401).json(
       new AppError({
@@ -25,10 +26,55 @@ Keycloak.prototype.accessDenied = (request: Request, response: Response) => {
     );
   }
 
+  if (!request.kauth?.grant) {
+    return response.status(401).json(
+      new AppError({
+        errorCode: 'token.invalid',
+        message: 'You are not authorized to access this resource, please check the sent token and make sure it is a valid token.'
+      })
+    );
+  }
+
+  _keycloak.storeGrant(request.kauth.grant as any, request, response);
+
+  const getGrant = await _keycloak.getGrant(request, response);
+
+  if (getGrant.isExpired()) {
+    return response.status(401).json(
+      new AppError({
+        errorCode: 'token.expired',
+        message: 'Expired token, please enter a valid token to continue.'
+      })
+    );
+  }
+
+  const hasAllRolesDefinedToContinue = request.keycloakRolesDefined.every(
+    role => getGrant.access_token?.hasRole(role)
+  );
+
+  if (!hasAllRolesDefinedToContinue) {
+    const myCurrentRoles = request.
+      kauth?.
+      grant?.
+      access_token?.
+      content?.
+      resource_access?.
+      nodejs?.
+      roles?.join(', ') || [];
+    const requiredRoles = request.keycloakRolesDefined.join(', ');
+
+    return response.status(401).json(
+      new AppError({
+        errorCode: 'roles.required',
+        message: `You must have all roles to continue, you have [${myCurrentRoles}], but it is necessary to have these roles [${requiredRoles}].`
+      })
+    );
+  }
+
   return response.status(401).json(
     new AppError({
       errorCode: 'token.invalid',
-      message: 'You are not authorized to access this resource, please check the sent token and make sure it is a valid token.'
+      message: 'Invalid token, enter a new token.'
     })
   );
 }

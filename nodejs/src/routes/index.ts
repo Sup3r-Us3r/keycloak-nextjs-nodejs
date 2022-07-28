@@ -1,7 +1,7 @@
-import { Router, Request } from 'express';
-import { Token } from 'keycloak-connect';
+import { Router } from 'express';
 
 import { getKeycloak } from '../config/keycloak';
+import { keycloakProtect } from '../utils/keycloakProtect';
 
 const router = Router();
 const keycloak = getKeycloak();
@@ -10,21 +10,25 @@ router.get('/anonymous', (_request, response) => {
   return response.send('Hello Anonymous');
 });
 
-router.get('/user', keycloak.protect('user'), (_request, response) => {
-  return response.send('Hello User');
-});
+router.get(
+  '/user',
+  keycloak.protect(keycloakProtect(['user'])),
+  (_request, response) => {
+    return response.send('Hello User');
+  }
+);
 
-router.get('/admin', keycloak.protect('admin'), (_request, response) => {
-  return response.send('Hello Admin');
-});
+router.get(
+  '/admin',
+  keycloak.protect(keycloakProtect(['admin'])),
+  (_request, response) => {
+    return response.send('Hello Admin');
+  }
+);
 
 router.get(
   '/all-user',
-  keycloak.protect(
-    (accessToken: Token, _request: Request) => {
-      return accessToken.hasRole('user') && accessToken.hasRole('admin');
-    }
-  ),
+  keycloak.protect(keycloakProtect(['user', 'admin'])),
   (request, response) => {
     console.log(request.kauth.grant.access_token.token);
 
