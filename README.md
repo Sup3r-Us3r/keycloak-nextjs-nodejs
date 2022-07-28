@@ -44,7 +44,7 @@ When the realm is created, the main admin console page opens. Notice the current
 
 Make sure `apps` is selected for the below configurations. Avoid using the master realm. You don’t have to create the realm every time. It’s a one time process.
 
-### Create Client
+### Create Clients
 
 Clients are entities that can request Keycloak to authenticate a user. Most often, clients are applications and services that want to use Keycloak to secure themselves and provide a single sign-on solution. Clients can also be entities that just want to request identity information or an access token so that they can securely invoke other services on the network that are secured by Keycloak.
 
@@ -52,11 +52,13 @@ Clients are entities that can request Keycloak to authenticate a user. Most ofte
 
 ![list-clients](.github/list-clients.png)
 
-2. To create a new client, click `Create`. You will be prompted for a `Client ID`, a `Client Protocol` and a `Root URL`. A good choice for the client ID is the name of your application (`nodejs`), the client protocol should be set to `openid-connect` and the root URL should be set to the application URL.
+2. To create a new client, click `Create`. You will be prompted for a `Client ID`, a `Client Protocol` and a `Root URL`. A good choice for the client ID is the name of your application, the client protocol should be set to `openid-connect` and the root URL should be set to the application URL.
+
+#### Create Node.js Client
 
 ![add-client-nodejs-1](.github/add-client-nodejs-1.png)
 
-3. After saving you will be presented with the client configuration page where you can assign a name and description to the client if desired.
+After saving you will be presented with the client configuration page where you can assign a name and description to the client if desired.
 
 Set the **Access Type** to `confidential`, **Authorization Enabled** to `ON`, `Service Account Enabled` to `ON` and click `Save`.
 
@@ -66,7 +68,7 @@ Set the **Access Type** to `confidential`, **Authorization Enabled** to `ON`, `S
 
 ![add-client-nodejs-credentials](.github/add-client-nodejs-credentials.png)
 
-4. Go to `Client Roles` tab to create the `nodejs` role definitions. Imagine the Application that you are building with have different types of users with different user permissions. Ex: users and administrators.
+Go to `Client Roles` tab to create the `nodejs` role definitions. Imagine the Application that you are building with have different types of users with different user permissions. Ex: users and administrators.
 
 - Some APIs would only be accessible to users only.
 - Some APIs would be accessible to administrators only.
@@ -81,6 +83,20 @@ As per the example, let’s create two roles: `user` and `admin` by clicking `Ad
 ![add-client-nodejs-add-admin-role](.github/add-client-nodejs-add-admin-role.png)
 
 ![add-client-nodejs-list-roles-2](.github/add-client-nodejs-list-roles-2.png)
+
+#### Create Next.js Client
+
+![add-client-nextjs-1](.github/add-client-nextjs-1.png)
+
+After saving you will be presented with the client configuration page where you can assign a name and description to the client if desired.
+
+Set the **Access Type** to `confidential`, **Authorization Enabled** to `ON`, `Service Account Enabled` to `ON` and click `Save`.
+
+![add-client-nextjs-2](.github/add-client-nextjs-2.png)
+
+`Credentials` tab will show the `Client Secret` which is required for the Next Auth configurations.
+
+![add-client-nextjs-credentials](.github/add-client-nextjs-credentials.png)
 
 ### Create Realm Roles
 
