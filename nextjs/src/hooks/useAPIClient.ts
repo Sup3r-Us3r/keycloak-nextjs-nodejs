@@ -3,10 +3,12 @@ import type { AxiosInstance } from 'axios';
 
 import { setupAPIClient } from '../services/api';
 
-function useAPIClient(): AxiosInstance {
+function useAPIClient(): AxiosInstance | undefined {
   const session = useSession();
 
-  return setupAPIClient(session.data);
+  if (session.status === 'authenticated') {
+    return setupAPIClient(session.data);
+  }
 }
 
 export { useAPIClient };
